@@ -1,3 +1,8 @@
-:root {
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
+:root {
+    --font-main: 'Roboto', sans-serif;
+
+    --color-text: #212529;
+    --color-text-highlihgted: #b33b3b;
 }

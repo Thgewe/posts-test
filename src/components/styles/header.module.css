@@ -1,0 +1,39 @@
+.header {
+    padding: 1rem;
+    box-shadow: 0 .25rem 1rem rgba(17, 34, 17, 0.1);
+    margin-bottom: 1rem;
+}
+
+.avatar {
+    width: 4rem;
+    height: 4rem;
+}
+.info {
+    gap: 1rem;
+}
+.link {
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-text);
+}
+.link:hover,
+.link:focus,
+.link.active {
+    color: var(--color-text-highlihgted);
+}
+
+.burger {
+    width: fit-content;
+    padding: .5rem;
+    cursor: pointer;
+}
+.burger span {
+    display: block;
+    width: 1.6rem;
+    height: .25rem;
+    background-color: var(--color-text);
+}
+.burger span + span {
+    margin-top: .2rem;
+}
