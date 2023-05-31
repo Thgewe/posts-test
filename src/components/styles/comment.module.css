@@ -1,0 +1,11 @@
+.comment + .comment {
+    padding-top: .5rem;
+    border-top: 1px solid #e3e3e3;
+}
+
+.comment > p {
+    font-size: .875rem;
+}
+.comment > h5 {
+    font-size: 1rem;
+}
