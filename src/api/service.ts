@@ -1,5 +1,6 @@
 import axios from "axios";
 import {IPost} from "../types/post-types";
+import {IComment} from "../types/comment-types";
 
 class apiService {
     static _apiBase = 'https://jsonplaceholder.typicode.com/'
@@ -23,6 +24,16 @@ class apiService {
                 .then((res) => {
                     return res.data as IPost[];
                 });
+        })
+    }
+
+    static async getCommentsByPostId(postId: string) {
+        return await this.delay(async () => {
+            return await axios.get(this._apiBase + 'comments', {
+                params: {postId}
+            }).then((res) => {
+                return res.data as IComment[];
+            });
         })
     }
 }

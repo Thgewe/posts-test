@@ -30,6 +30,7 @@ const PostsList = () => {
         }
     }, [isBottom, posts.posts.allIds])
 
+    // При скролле, проверяет, достиг ли пользователь конца страницы
     const scrollHandler = debounce(() => {
         const scrollTop = document.documentElement.scrollTop;
         const scrollHeight = document.documentElement.scrollHeight;
