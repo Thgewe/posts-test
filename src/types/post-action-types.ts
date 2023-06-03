@@ -1,6 +1,7 @@
 import {IPost} from "./post-types";
 
 export enum PostsActionTypes {
+    FETCH_USER_POSTS_REQUEST = 'FETCH_USER_POSTS_REQUEST',
     FETCH_FILTERED_POSTS_REQUEST = 'FETCH_FILTERED_POSTS_REQUEST',
     FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS',
     FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE',
@@ -17,6 +18,10 @@ export interface IFetchFilteredPostsRequestPayload {
     sort?: boolean,
 }
 
+export interface IFetchUserPostsRequest {
+    type: PostsActionTypes.FETCH_USER_POSTS_REQUEST,
+    payload: string,
+}
 export interface IFetchFilteredPostsRequest {
     type: PostsActionTypes.FETCH_FILTERED_POSTS_REQUEST,
     payload: IFetchFilteredPostsRequestPayload
@@ -31,6 +36,7 @@ export interface IFetchPostsFailure {
 }
 
 export type PostsAction =
+    IFetchUserPostsRequest |
     IFetchFilteredPostsRequest |
     IFetchPostsSuccess |
     IFetchPostsFailure

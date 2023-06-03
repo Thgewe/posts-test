@@ -5,6 +5,7 @@ import {
     IFetchPostsFailure,
     IFetchPostsSuccess,
     IFetchPostsSuccessPayload,
+    IFetchUserPostsRequest,
     PostsAction,
     PostsActionTypes
 } from "../../types/post-action-types";
@@ -22,6 +23,12 @@ const initialState: IPostsState = {
 
 export const postsReducer = (state: IPostsState = initialState, action: PostsAction) => {
     switch (action.type) {
+        case PostsActionTypes.FETCH_USER_POSTS_REQUEST:
+            return {
+                ...state,
+                pending: true,
+                errorMsg: '',
+            }
         case PostsActionTypes.FETCH_FILTERED_POSTS_REQUEST:
             return {
                 ...state,
@@ -30,6 +37,7 @@ export const postsReducer = (state: IPostsState = initialState, action: PostsAct
                     ? state.sort
                     : action.payload.sort,
                 pending: true,
+                errorMsg: '',
             }
         case PostsActionTypes.FETCH_POSTS_SUCCESS:
             window.scrollTo(0, 0);
@@ -55,6 +63,10 @@ export const postsReducer = (state: IPostsState = initialState, action: PostsAct
     }
 }
 
+export const fetchUserPostsRequest = (payload: string): IFetchUserPostsRequest => ({
+    type: PostsActionTypes.FETCH_USER_POSTS_REQUEST,
+    payload,
+});
 export const fetchFilteredPostsRequest =
     (payload: IFetchFilteredPostsRequestPayload): IFetchFilteredPostsRequest => ({
         type: PostsActionTypes.FETCH_FILTERED_POSTS_REQUEST,

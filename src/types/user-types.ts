@@ -9,3 +9,13 @@ export interface IUser {
     email: string,
     address: IAddress,
 }
+
+export interface IUserState {
+    id: string,
+    name: string,
+    username: string,
+    email: string,
+    address: IAddress,
+    pending: boolean,
+    errorMsg: string,
+}

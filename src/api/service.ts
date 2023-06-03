@@ -2,6 +2,7 @@ import axios from "axios";
 import {IPost} from "../types/post-types";
 import {IComment} from "../types/comment-types";
 import {IGetPosts} from "../types/api-return-types";
+import {IUser} from "../types/user-types";
 
 class apiService {
     static _apiBase = 'https://jsonplaceholder.typicode.com/';
@@ -36,6 +37,25 @@ class apiService {
                         posts: res.data as IPost[],
                         totalPosts: parseInt(res.headers['x-total-count']),
                     }
+                })
+        })
+    }
+
+    static async getUserById(userId: string): Promise<IUser> {
+        return await this.delay(async () => {
+            return await axios.get(this._apiBase + 'users/' + userId)
+                .then((res) => {
+                    return res.data as IUser;
+                });
+        })
+    }
+    static async getUserPosts(userId: string): Promise<IPost[]> {
+        return await this.delay(async () => {
+            return await axios.get(this._apiBase + 'posts', {
+                params: {userId: userId}
+            })
+                .then((res) => {
+                    return res.data as IPost[];
                 })
         })
     }

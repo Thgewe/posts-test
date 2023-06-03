@@ -1,20 +1,11 @@
 import React from 'react';
 import {Col, Container, Image, Row, Table} from "react-bootstrap";
-import {IUser} from "../types/user-types";
 import {userAvatarImageSrc} from "../utils/constants";
+import {useAppSelector} from "../hooks/redux";
 
 const UserInfo = () => {
 
-    const user: IUser = {
-        id: '1',
-        name: 'Viktor',
-        username: 'Thgewe',
-        email: 'hanhatov@mail.ru',
-        address: {
-           street: 'Lenina',
-           city: 'Ulan-Ude',
-        }
-    }
+    const user = useAppSelector(state => state.user);
 
     return (
         <Container className={'mb-3'}>
