@@ -29,7 +29,9 @@ const PostsList: FC<IPostListProps> = ({userId}) => {
             {
                 userId !== undefined && posts.pending
                     ? <Spinner />
-                    : posts.posts.map((post) =>
+                    : posts.errorMsg !== ''
+                        ? <Alert variant={'danger'}>{posts.errorMsg}</Alert>
+                        : posts.posts.map((post) =>
                     <PostCard
                         key={post.id}
                         id={post.id}
@@ -41,7 +43,7 @@ const PostsList: FC<IPostListProps> = ({userId}) => {
                 )
             }
             {
-                posts.posts.length <= 0
+                posts.posts.length <= 0 && posts.errorMsg === ''
                     ? posts.pending
                         ? null
                         : <Alert>Нет постов</Alert>
