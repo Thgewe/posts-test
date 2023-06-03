@@ -7,6 +7,7 @@ import cl from './styles/searchFilter.module.css';
 const SearchFilter = () => {
 
     const [value, setValue] = useState<string>('');
+    const [sort, setSort] = useState<boolean>(false);
 
     const dispatch = useAppDispatch();
 
@@ -15,22 +16,27 @@ const SearchFilter = () => {
             dispatch(fetchFilteredPostsRequest({
                 newPage: 1,
                 filter: value,
+                sort: sort,
             }))
         }, 200)
 
         return () => {
             clearTimeout(delay);
         }
-    }, [value]);
+    }, [value, sort]);
 
     const clickHandler = () => {
         setValue('');
     }
 
+    const submitHandler = (e: React.FormEvent) => {
+        e.preventDefault();
+    }
+
     return (
-        <div className={'mb-3'}>
+        <Form className={'mb-3'} onSubmit={submitHandler}>
             <Form.Label htmlFor={'search'}>Поиск по названию</Form.Label>
-            <InputGroup>
+            <InputGroup className={'mb-2'}>
                 <Form.Control
                     value={value}
                     onInput={(e) => setValue(e.currentTarget.value)}
@@ -45,7 +51,11 @@ const SearchFilter = () => {
                     ✖
                 </Button>
             </InputGroup>
-        </div>
+            <Form.Switch
+                onChange={() => setSort(!sort)}
+                label={'Сортировать по названию'}
+            />
+        </Form>
     );
 };
 

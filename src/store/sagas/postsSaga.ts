@@ -6,13 +6,14 @@ import {IGetPosts} from "../../types/api-return-types";
 
 function* filteredPostsWorker(action: IFetchFilteredPostsRequest) {
 
-    const { postsPerPage } = yield select(state => state.posts);
+    const { postsPerPage, sort } = yield select(state => state.posts);
 
     try {
         const data: IGetPosts = yield call(() =>
             apiService.getFilteredPosts(
                 action.payload.newPage,
                 action.payload.filter,
+                sort,
             )
         );
         yield put(fetchPostsSuccess({

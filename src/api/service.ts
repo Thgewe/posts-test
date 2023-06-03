@@ -17,13 +17,19 @@ class apiService {
         })
     }
 
-    static async getFilteredPosts(page: number, filter: string): Promise<IGetPosts> {
+    static async getFilteredPosts(page: number, filter: string, sort: boolean = false): Promise<IGetPosts> {
         return await this.delay(async () => {
             return await axios.get(this._apiBase + 'posts', {
-                params: {
-                    _page: page,
-                    title_like: filter
-                }
+                params: sort
+                    ? {
+                        _page: page,
+                        title_like: filter,
+                        _sort: 'title',
+                    }
+                    : {
+                        _page: page,
+                        title_like: filter
+                    }
             })
                 .then((res) => {
                     return {

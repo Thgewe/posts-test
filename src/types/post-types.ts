@@ -7,6 +7,7 @@ export interface IPost {
 
 export interface IPostsState {
     filter: string,
+    sort: undefined | boolean,
     currentPage: number,
     totalPages: number,
     postsPerPage: number,

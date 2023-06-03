@@ -14,6 +14,7 @@ export interface IFetchPostsSuccessPayload {
 export interface IFetchFilteredPostsRequestPayload {
     filter: string,
     newPage: number,
+    sort?: boolean,
 }
 
 export interface IFetchFilteredPostsRequest {

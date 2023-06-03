@@ -11,6 +11,7 @@ import {
 
 const initialState: IPostsState = {
     filter: '',
+    sort: false,
     currentPage: 1,
     totalPages: 0,
     postsPerPage: 10,
@@ -22,9 +23,14 @@ const initialState: IPostsState = {
 export const postsReducer = (state: IPostsState = initialState, action: PostsAction) => {
     switch (action.type) {
         case PostsActionTypes.FETCH_FILTERED_POSTS_REQUEST:
+            console.log(action.payload.sort, 'payload')
+            console.log(state.sort, 'state')
             return {
                 ...state,
                 filter: action.payload.filter,
+                sort: action.payload.sort === undefined
+                    ? state.sort
+                    : action.payload.sort,
                 pending: true,
             }
         case PostsActionTypes.FETCH_POSTS_SUCCESS:
