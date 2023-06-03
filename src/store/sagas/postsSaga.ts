@@ -1,21 +1,31 @@
-import {IPost} from "../../types/post-types";
 import {call, put, select, takeLatest} from "redux-saga/effects";
 import apiService from "../../api/service";
 import {fetchPostsFailure, fetchPostsSuccess} from "../reducers/postsReducer";
-import {PostsActionTypes} from "../../types/post-action-types";
+import {IFetchFilteredPostsRequest, PostsActionTypes} from "../../types/post-action-types";
+import {IGetPosts} from "../../types/api-return-types";
 
-function* postsWorker() {
+function* filteredPostsWorker(action: IFetchFilteredPostsRequest) {
 
-    const { currentPage } = yield select((state) => state.posts);
+    const { postsPerPage } = yield select(state => state.posts);
 
     try {
-        const posts: IPost[] = yield call(() => apiService.getPosts(currentPage));
-        yield put(fetchPostsSuccess(posts));
+        const data: IGetPosts = yield call(() =>
+            apiService.getFilteredPosts(
+                action.payload.newPage,
+                action.payload.filter,
+            )
+        );
+        yield put(fetchPostsSuccess({
+            posts: data.posts,
+            newPage: action.payload.newPage,
+            totalPages: Math.ceil(data.totalPosts / postsPerPage),
+        }));
     } catch (e: any) {
         yield put(fetchPostsFailure(e.message));
     }
+
 }
 
-export function* postsWatcher() {
-    yield takeLatest(PostsActionTypes.FETCH_POSTS_REQUEST, postsWorker);
+export function* filteredPostsWatcher() {
+    yield takeLatest(PostsActionTypes.FETCH_FILTERED_POSTS_REQUEST, filteredPostsWorker);
 }

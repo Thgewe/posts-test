@@ -5,19 +5,12 @@ export interface IPost {
     body: string,
 }
 
-export interface IPosts {
-    byId: {
-        [index: string]: IPost
-    },
-    allIds: string[],
-}
-
 export interface IPostsState {
+    filter: string,
     currentPage: number,
-    totalPosts: number,
+    totalPages: number,
     postsPerPage: number,
     pending: boolean,
     errorMsg: string,
-    posts: IPosts,
-    isNoMorePosts: boolean,
+    posts: IPost[],
 }

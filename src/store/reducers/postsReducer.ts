@@ -1,58 +1,46 @@
-import {IPost, IPosts, IPostsState} from "../../types/post-types";
+import {IPostsState} from "../../types/post-types";
 import {
+    IFetchFilteredPostsRequest,
+    IFetchFilteredPostsRequestPayload,
     IFetchPostsFailure,
-    IFetchPostsRequest,
     IFetchPostsSuccess,
+    IFetchPostsSuccessPayload,
     PostsAction,
     PostsActionTypes
 } from "../../types/post-action-types";
 
 const initialState: IPostsState = {
+    filter: '',
     currentPage: 1,
-    totalPosts: 0,
+    totalPages: 0,
     postsPerPage: 10,
     pending: false,
     errorMsg: '',
-    posts: {
-        byId: {},
-        allIds: [],
-    },
-    isNoMorePosts: false,
+    posts: [],
 }
 
 export const postsReducer = (state: IPostsState = initialState, action: PostsAction) => {
     switch (action.type) {
-        case PostsActionTypes.FETCH_POSTS_REQUEST:
+        case PostsActionTypes.FETCH_FILTERED_POSTS_REQUEST:
             return {
                 ...state,
+                filter: action.payload.filter,
                 pending: true,
-            };
-        case PostsActionTypes.FETCH_POSTS_SUCCESS:
-            const newPosts: IPosts = {
-                byId: {},
-                allIds: [],
             }
-            action.payload.forEach((post) => {
-                newPosts.byId[post.id] = post;
-                newPosts.allIds.push(post.id);
-            })
+        case PostsActionTypes.FETCH_POSTS_SUCCESS:
+            window.scrollTo(0, 0);
 
             return {
                 ...state,
-                currentPage: state.currentPage + 1,
-                totalPosts: state.totalPosts + state.postsPerPage,
+                currentPage: action.payload.newPage,
                 pending: false,
                 errorMsg: '',
-                posts: {
-                    byId: {
-                        ...state.posts.byId,
-                        ...newPosts.byId,
-                    },
-                    allIds: [...state.posts.allIds, ...newPosts.allIds]
-                },
-                isNoMorePosts: newPosts.allIds.length < state.postsPerPage
+                posts: action.payload.posts,
+                totalPages: action.payload.totalPages,
             };
         case PostsActionTypes.FETCH_POSTS_FAILURE:
+            window.scrollTo(0, 0);
+
             return {
                 ...state,
                 pending: false,
@@ -63,10 +51,12 @@ export const postsReducer = (state: IPostsState = initialState, action: PostsAct
     }
 }
 
-export const fetchPostsRequest = (): IFetchPostsRequest => ({
-    type: PostsActionTypes.FETCH_POSTS_REQUEST,
-});
-export const fetchPostsSuccess = (payload: IPost[]): IFetchPostsSuccess => ({
+export const fetchFilteredPostsRequest =
+    (payload: IFetchFilteredPostsRequestPayload): IFetchFilteredPostsRequest => ({
+        type: PostsActionTypes.FETCH_FILTERED_POSTS_REQUEST,
+        payload: payload,
+})
+export const fetchPostsSuccess = (payload: IFetchPostsSuccessPayload): IFetchPostsSuccess => ({
     type: PostsActionTypes.FETCH_POSTS_SUCCESS,
     payload,
 });
@@ -74,3 +64,4 @@ export const fetchPostsFailure = (payload: string): IFetchPostsFailure => ({
     type: PostsActionTypes.FETCH_POSTS_FAILURE,
     payload,
 });
+

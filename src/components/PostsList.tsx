@@ -1,69 +1,60 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import PostCard from "./PostCard";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
-import {fetchPostsRequest} from "../store/reducers/postsReducer";
-import {Alert, Spinner} from "react-bootstrap";
-import debounce from "../utils/debounce";
+import {fetchFilteredPostsRequest} from "../store/reducers/postsReducer";
+import {Alert, Spinner, Toast, ToastContainer} from "react-bootstrap";
 
 const PostsList = () => {
 
     const posts = useAppSelector(state => state.posts);
     const dispatch = useAppDispatch();
-    const [isBottom, setIsBottom] = useState<boolean>(false);
 
     useEffect(() => {
-        if (posts.posts.allIds.length <= 0) {
-            dispatch(fetchPostsRequest());
+        if (posts.posts.length <= 0) {
+            dispatch(fetchFilteredPostsRequest({
+                newPage: posts.currentPage,
+                filter: posts.filter,
+            }))
         }
-
-        window.addEventListener("scroll", scrollHandler);
-        return () => window.removeEventListener("scroll", scrollHandler);
     }, [])
-
-    useEffect(() => {
-        if (isBottom) {
-            if (posts.isNoMorePosts) {
-                return
-            }
-            dispatch(fetchPostsRequest());
-            setIsBottom(false);
-        }
-    }, [isBottom, posts.posts.allIds])
-
-    // При скролле, проверяет, достиг ли пользователь конца страницы
-    const scrollHandler = debounce(() => {
-        const scrollTop = document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight;
-
-        if (scrollTop + window.innerHeight + 100 >= scrollHeight) {
-            setIsBottom(true);
-        }
-    }, 100)
 
     return (
         <div className={'d-flex align-items-center flex-column'}>
             {
-                posts.posts.allIds.map((id) =>
+                posts.posts.map((post) =>
                     <PostCard
-                        key={posts.posts.byId[id].id}
-                        id={posts.posts.byId[id].id}
-                        userId={posts.posts.byId[id].userId}
+                        key={post.id}
+                        id={post.id}
+                        userId={post.userId}
                         avatar={''}
-                        title={posts.posts.byId[id].title}
-                        body={posts.posts.byId[id].body}
+                        title={post.title}
+                        body={post.body}
                     />
                 )
             }
             {
-                posts.pending
-                    ? <Spinner className={'mb-4 mt-4'}/>
+                posts.posts.length <= 0
+                    ? posts.pending
+                        ? null
+                        : <Alert>Нет постов</Alert>
                     : null
             }
-            {
-                posts.isNoMorePosts
-                    ? <Alert>Больше нет постов</Alert>
-                    : null
-            }
+            <ToastContainer
+                position={'bottom-start'}
+                className={'position-fixed mb-4 ms-4'}
+            >
+                <Toast
+                    show={posts.pending}
+                    style={{
+                        width: 'fit-content',
+                        fontSize: 0,
+                        backgroundColor: 'white',
+                        boxShadow: 'none',
+                    }}
+                >
+                    <Spinner className={'m-1'} style={{fontSize: '.75rem'}}/>
+                </Toast>
+            </ToastContainer>
         </div>
     );
 };
