@@ -1,10 +1,14 @@
 import React from 'react';
+import UserInfo from "../components/UserInfo";
+import PostsList from "../components/PostsList";
+import {Container} from "react-bootstrap";
 
 const UserPage = () => {
     return (
-        <div>
-            user
-        </div>
+        <Container>
+            <UserInfo />
+            <PostsList />
+        </Container>
     );
 };
 
